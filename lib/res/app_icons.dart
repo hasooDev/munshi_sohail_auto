@@ -1,0 +1,30 @@
+class AppIcons{
+  static const String logo= "assets/icons/ic_logo.png";
+  static const String appLogo= "assets/icons/ic_app_logo.png";
+  static const String mail = "assets/icons/ic_mail.png";
+  static const String password= "assets/icons/ic_password.png";
+  static const String eyeOn= "assets/icons/ic_eye_on.png";
+  static const String eyeOff= "assets/icons/ic_eye_off.png";
+  static const String add= "assets/icons/ic_add.png";
+  static const String company= "assets/icons/ic_company.png";
+  static const String product= "assets/icons/ic_product.png";
+  static const String customer= "assets/icons/ic_customer.png";
+  static const String signOut= "assets/icons/ic_signout.png";
+  static const String sales= "assets/icons/ic_sales.png";
+  static const String category= "assets/icons/ic_category.png";
+  static const String camera = "assets/icons/ic_camera.png";
+  static const String user = "assets/icons/ic_person.png";
+  static const String alert ="assets/icons/ic_alertt.png";
+  static const String rupee="assets/icons/ic_rupee.png";
+  static const String quantity="assets/icons/ic_quantityy.png";
+  static const String unit="assets/icons/ic_unit.png";
+  static const String client="assets/icons/ic_client.png";
+  static const String colorCompany="assets/icons/ic_color_company.png";
+  static const String colorCategory="assets/icons/ic_color_category.png";
+  static const String colorProduct="assets/icons/ic_color_product.png";
+  static const String colorCustomer="assets/icons/ic_color_customer.png";
+  static const String colorSales="assets/icons/ic_color_sales.png";
+  static const String colorClient="assets/icons/ic_color_client.png";
+  static const String colorBackup="assets/icons/ic_color_backup.png";
+  static const String colorLogout="assets/icons/ic_color_logout.png";
+}

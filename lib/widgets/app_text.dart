@@ -9,6 +9,7 @@ class AppText extends StatelessWidget {
   final int? maxLines;
   final TextOverflow overflow;
   final TextStyle? style;
+  final FontStyle fontStyle; // ✅ Correct type & naming
 
   const AppText({
     super.key,
@@ -20,7 +21,7 @@ class AppText extends StatelessWidget {
     this.maxLines,
     this.overflow = TextOverflow.visible,
     this.style,
-
+    this.fontStyle = FontStyle.normal, // ✅ Default value
   });
 
   @override
@@ -30,15 +31,14 @@ class AppText extends StatelessWidget {
       textAlign: textAlign,
       maxLines: maxLines,
       overflow: overflow,
-      style:
-          style ??
+      style: style ??
           TextStyle(
-            fontFamily: "Lexend",
+            fontFamily: 'Lufga',
             fontSize: fontSize,
             color: color,
             fontWeight: fontWeight,
+            fontStyle: fontStyle, // ✅ Use parameter
           ),
     );
   }
 }
-//

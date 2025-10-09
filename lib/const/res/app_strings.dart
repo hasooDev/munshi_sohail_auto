@@ -1,5 +1,8 @@
 class AppStrings {
-  static const String appName = "Badge Scanner";
+  static const String appName = "Munshi Sohail Auto";
+  static const String appTitle="Your Journey, Our Parts, Lasting Trust";
+  static const String welcome ="Welcome Back to Sohail Auto";
+  static const String welcomeTitle="Log in to access a wide range of trusted truck spare parts, tailored for performance and durability.";
   static const String email = "Email";
   static const String gmail = "abc@email.com";
   static const String emailAndPasswordRequired='Email and password required';
@@ -27,7 +30,7 @@ class AppStrings {
   static const String updatePassword = "Update Password";
   static const String newPassword = "New Password";
   static const String confirmPassword = "Confirm Password";
-  static const String login = "LOGIN";
+  static const String login = "Login";
   static const String updateRequired = "UPDATE REQUIRED";
   static const String updateDescription =
       "To access all of the features within this app you must update to the latest version";

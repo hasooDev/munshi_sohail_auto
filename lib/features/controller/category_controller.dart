@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../const/res/app_color.dart';
 import '../../models/admin/category_model.dart';
 import '../../models/admin/company_model.dart';
-import '../../res/app_color.dart';
 import '../../services/database_helper.dart';
 import '../../widgets/app_text.dart';
 import '../../widgets/text_action.dart';
@@ -14,6 +14,7 @@ class CategoryController extends GetxController {
   RxList<CategoryModel> categoryList = <CategoryModel>[].obs;
   RxList<CategoryModel> filteredCategoryList = <CategoryModel>[].obs;
   RxString searchQuery = ''.obs;
+  RxBool isLoading=false.obs;
 
   @override
   void onInit() {
@@ -106,6 +107,20 @@ class CategoryController extends GetxController {
                 text: "Delete",
                 onPressed: () {
                   Get.back();
+                      Get.snackbar(
+                        "Deleted", // <- title
+                        "Company $categoryId successfully deleted", // <- message
+                        snackPosition: SnackPosition.TOP,
+                        backgroundColor: Colors.red,
+                        duration: const Duration(seconds: 3),
+                        margin: const EdgeInsets.all(12),
+                        borderRadius: 8,
+                        icon: const Icon(
+                          Icons.done_outline,
+                          color: Colors.white,
+                        ),
+                        colorText: Colors.white,
+                      );
                   onDelete();
                 },
                 verticalPadding: 8,

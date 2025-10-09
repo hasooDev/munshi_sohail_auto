@@ -38,6 +38,7 @@ class RotatingBarsPainter extends CustomPainter {
       final endX = center.dx + cos(angle) * endRadius;
       final endY = center.dy + sin(angle) * endRadius;
 
+      // ignore: deprecated_member_use
       paint.color = color.withOpacity(alpha);
 
       canvas.drawLine(Offset(startX, startY), Offset(endX, endY), paint);

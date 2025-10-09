@@ -1,11 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart' show SpinKitFadingCircle;
 import 'package:get/get.dart';
 import 'package:sohail_auto/features/controller/company_controller.dart';
-import 'package:sohail_auto/res/app_color.dart';
 import 'package:sohail_auto/widgets/app_text.dart';
+import 'package:sohail_auto/widgets/custom_app_bar.dart';
 
+import '../../../../const/res/app_color.dart';
 import '../../../../models/admin/company_model.dart';
 import '../../../../widgets/add_category_widget.dart';
 import '../../../controller/category_controller.dart';
@@ -23,104 +25,103 @@ class _CategoryState extends State<Category> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: AppBar(
-        title: AppText(
-          text: 'Category',
-          fontSize: 20,
-          fontWeight: FontWeight.w700,
-        ),
-        leading: IconButton(
-          highlightColor: Colors.transparent,
-          splashColor: Colors.transparent,
-          onPressed: () => Get.back(),
-          icon: Icon(Icons.arrow_back_ios, size: 20, color: AppColors.c5669ff),
-        ),
+    return Stack(
+      children:[ Scaffold(
         backgroundColor: AppColors.white,
-        elevation: 0,
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.c5669ff,
-        onPressed: () {
-          Get.bottomSheet(
-            buildCategory(context),
-            backgroundColor: AppColors.white,
-          ).then(
-            (_) => categoryController.fetchCategories(),
-          ); // 🔁 Refresh list
-        },
-        child: const Icon(Icons.add, color: AppColors.white),
-      ),
-      body: Obx(() {
-        if (categoryController.categoryList.isEmpty) {
-          return Center(child: AppText(text: "No Categories Found"));
-        }
-
-        return ListView.builder(
-          itemCount: categoryController.categoryList.length,
-          itemBuilder: (context, index) {
-            final category = categoryController.categoryList[index];
-            final company = companyController.companyList.firstWhere(
-              (c) => c.id == category.companyId,
-              orElse: () => CompanyModel(id: 0, name: "Unknown", imagePath: ''),
-            );
-            return Padding(
-              padding: const EdgeInsets.only(top: 0,
-              left: 12,right: 12,bottom: 12),
-              child: Card(
-                color: AppColors.white,
-                elevation: 3,
-                margin: const EdgeInsets.only(bottom: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: ListTile(
-                  splashColor: Colors.transparent,
-                  leading: category.imagePath != null
-                      ? CircleAvatar(
-                          radius: 34,
-                          backgroundImage: FileImage(File(category.imagePath!)),
-                        )
-                      : const CircleAvatar(child: Icon(Icons.image)),
-                  title: AppText(
-                    text: category.name,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Colors.blueGrey,
-                  ),
-                  subtitle: RichText(
-                    text: TextSpan(
-                      text: 'Company : ',
-                      style: TextStyle(
-                        color: AppColors.softRed,
-                        fontFamily: "Lexend",
-                        fontSize: 14,
-                        fontWeight: FontWeight.w800
+        appBar: CustomAppBar(title: "Category"),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: AppColors.c5669ff,
+          onPressed: () {
+            Get.bottomSheet(
+              buildCategory(context),
+              backgroundColor: AppColors.white,
+            ).then(
+              (_) => categoryController.fetchCategories(),
+            ); // 🔁 Refresh list
+          },
+          child: const Icon(Icons.add, color: AppColors.white),
+        ),
+        body: Obx(() {
+          if (categoryController.categoryList.isEmpty) {
+            return Center(child: AppText(text: "No Categories Found"));
+          }
+      
+          return ListView.builder(
+            itemCount: categoryController.categoryList.length,
+            itemBuilder: (context, index) {
+              final category = categoryController.categoryList[index];
+              final company = companyController.companyList.firstWhere(
+                (c) => c.id == category.companyId,
+                orElse: () => CompanyModel(id: 0, name: "Unknown", imagePath: ''),
+              );
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        // ignore: deprecated_member_use
+                        color: Colors.grey.withOpacity(0.15),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
                       ),
-                      children: [
-                        TextSpan(
-                          text: company.name,
-                          style: TextStyle(
-                            fontFamily: "Lexend",
-                            fontSize: 14,
-                            color: AppColors.black,
-                            fontWeight: FontWeight.w800
-                          ),
-                        ),
-                      ],
-                    ),
+                    ],
                   ),
-              /*Pop Up item :*/
-                  trailing: Theme(
-                    data: Theme.of(context).copyWith(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      hoverColor: Colors.transparent,
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
                     ),
-                    child: PopupMenuButton<String>(
+                    leading: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: category.imagePath != null
+                          ? Image.file(
+                              File(category.imagePath!),
+                              width: 55,
+                              height: 55,
+                              fit: BoxFit.cover,
+                            )
+                          : Container(
+                              width: 55,
+                              height: 55,
+                              color: Colors.grey.shade200,
+                              child: const Icon(Icons.image, color: Colors.grey),
+                            ),
+                    ),
+                    title: AppText(
+                      text: category.name,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: AppColors.black,
+                    ),
+                    subtitle: Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.c5669ff.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: AppText(
+                          text: company.name,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.c5669ff,
+                        ),
+                      ),
+                    ),
+                    trailing: PopupMenuButton<String>(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                       icon: const Icon(Icons.more_vert, color: AppColors.black),
-                      color: AppColors.white,
+                      color: Colors.white,
                       onSelected: (value) {
                         if (value == 'Edit') {
                           Get.bottomSheet(
@@ -156,12 +157,32 @@ class _CategoryState extends State<Category> {
                     ),
                   ),
                 ),
+              );
+            },
+          );
+        }),
+      ),
+      Obx(() {
+          if (!categoryController.isLoading.value) return const SizedBox();
+          return Container(
+            color: Colors.black26,
+            child: Center(
+              child: Container(
+                height: 64,
+                width: 64,
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(19),
+                ),
+                child: SpinKitFadingCircle(
+                  color: Colors.black.withOpacity(0.5),
+                  size: 36,
+                ),
               ),
-            );
-
-          },
-        );
-      }),
+            ),
+          );
+        }),
+      ]
     );
   }
 }

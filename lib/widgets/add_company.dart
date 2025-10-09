@@ -1,20 +1,19 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../features/controller/auth_controller.dart';
-import '../res/app_color.dart';
-import '../res/app_icons.dart';
+import '../const/res/app_color.dart';
+import '../const/res/app_icons.dart';
 import 'app_text.dart';
 import 'input_field.dart';
 import 'text_action.dart';
 
 Widget buildAddCompanySheet(BuildContext context) {
-  final authController = Get.put(AuthController());
   final TextEditingController brandController = TextEditingController();
-  final TextEditingController inventoryController = TextEditingController(text: '0');
+  final TextEditingController inventoryController = TextEditingController(
+    text: '0',
+  );
   final ImagePicker picker = ImagePicker();
 
   int inventory = 0;
@@ -23,7 +22,9 @@ Widget buildAddCompanySheet(BuildContext context) {
   return StatefulBuilder(
     builder: (context, setState) {
       Future<void> pickImage() async {
-        final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+        final XFile? image = await picker.pickImage(
+          source: ImageSource.gallery,
+        );
         if (image != null) {
           setState(() {
             pickedImage = File(image.path);
@@ -61,13 +62,17 @@ Widget buildAddCompanySheet(BuildContext context) {
                     shape: BoxShape.circle,
                     image: pickedImage != null
                         ? DecorationImage(
-                      image: FileImage(pickedImage!),
-                      fit: BoxFit.cover,
-                    )
+                            image: FileImage(pickedImage!),
+                            fit: BoxFit.cover,
+                          )
                         : null,
                   ),
                   child: pickedImage == null
-                      ? const Icon(Icons.camera_alt, size: 40, color: Colors.black54)
+                      ? const Icon(
+                          Icons.camera_alt,
+                          size: 40,
+                          color: Colors.black54,
+                        )
                       : null,
                 ),
               ),
@@ -92,6 +97,7 @@ Widget buildAddCompanySheet(BuildContext context) {
               label: "Brand Name",
               labelColor: AppColors.black,
               hintColor: AppColors.black,
+              // ignore: deprecated_member_use
               fillColor: Colors.black.withOpacity(0.1),
               prefixColor: Colors.black,
             ),
@@ -104,7 +110,11 @@ Widget buildAddCompanySheet(BuildContext context) {
               children: [
                 const Text(
                   'Inventory',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, fontFamily: 'Lexend'),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Lexend',
+                  ),
                 ),
                 Row(
                   children: [
@@ -131,7 +141,10 @@ Widget buildAddCompanySheet(BuildContext context) {
                         controller: inventoryController,
                         keyboardType: TextInputType.number,
                         textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 16, fontFamily: "Lexend"),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontFamily: "Lexend",
+                        ),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                           isDense: true,
@@ -161,12 +174,7 @@ Widget buildAddCompanySheet(BuildContext context) {
 
             const SizedBox(height: 24),
 
-            TextAction(
-              text: 'Submit',
-              onPressed: () {
-
-              },
-            ),
+            TextAction(text: 'Submit', onPressed: () {}),
           ],
         ),
       );

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../res/app_color.dart';
+import '../const/res/app_color.dart';
 import 'app_text.dart';
+
 class CustomDropdown<T> extends StatefulWidget {
   final List<T> items;
   final T? selectedItem;
@@ -62,9 +63,9 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
                   Expanded(
                     child: AppText(
                       text: selectedLabel ?? widget.hintText,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+
                     ),
                   ),
                   Icon(isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
@@ -76,7 +77,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
             Container(
               padding: const EdgeInsets.only(bottom: 8),
               decoration: BoxDecoration(
-                color: AppColors.black.withAlpha(7),
+                color: AppColors.black.withAlpha(2),
                 borderRadius: const BorderRadius.vertical(bottom: Radius.circular(12)),
               ),
               child: ListView.builder(
@@ -96,9 +97,9 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
                       padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 14),
                       child: AppText(
                         text: widget.itemLabelBuilder(item),
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+
                       ),
                     ),
                   );

@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../const/res/app_color.dart';
+import '../const/res/app_icons.dart';
 import '../features/controller/category_controller.dart';
 import '../models/admin/category_model.dart';
 import '../models/admin/company_model.dart';
-import '../res/app_color.dart';
-import '../res/app_icons.dart';
 import 'app_text.dart';
 import 'custom_drop_down.dart';
 import 'input_field.dart';
@@ -109,7 +109,9 @@ Widget buildCategory(BuildContext context, {CategoryModel? existingCategory}) {
 
                 const SizedBox(height: 24),
                 TextAction(
-                  verticalPadding: 9,
+                  verticalPadding: 12,
+                  backgroundColor: AppColors.black,
+                  circleIcon: AppColors.white,
                   text: existingCategory == null ? "Save" : "Update",
                   onPressed: () {
                     categoryController.validateAndSubmitCategory(

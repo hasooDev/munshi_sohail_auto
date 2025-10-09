@@ -22,22 +22,22 @@ class CompanyModel {
   }
 }
 //
-class Company {
-  final int? id;
-  final String name;
-  final String? imageUrl;
+// class Company {
+//   final int? id;
+//   final String name;
+//   final String? imageUrl;
 
-  Company({this.id, required this.name, this.imageUrl});
+//   Company({this.id, required this.name, this.imageUrl});
 
-  Map<String, dynamic> toJson() => {
-    'id': id,
-    'name': name,
-    'image_url': imageUrl,
-  };
+//   Map<String, dynamic> toJson() => {
+//     'id': id,
+//     'name': name,
+//     'image_url': imageUrl,
+//   };
 
-  factory Company.fromJson(Map<String, dynamic> json) => Company(
-    id: json['id'],
-    name: json['name'],
-    imageUrl: json['image_url'],
-  );
-}
+//   factory Company.fromJson(Map<String, dynamic> json) => Company(
+//     id: json['id'],
+//     name: json['name'],
+//     imageUrl: json['image_url'],
+//   );
+// }

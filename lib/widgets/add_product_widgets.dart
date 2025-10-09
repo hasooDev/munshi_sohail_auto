@@ -7,8 +7,8 @@ import 'package:image_picker/image_picker.dart';
 import '../../features/controller/category_controller.dart';
 import '../../features/controller/company_controller.dart';
 import '../../features/controller/product_controller.dart';
-import '../../res/app_color.dart';
-import '../../res/app_icons.dart';
+import '../const/res/app_color.dart';
+import '../const/res/app_icons.dart';
 import '../models/admin/category_model.dart';
 import '../models/admin/company_model.dart' show CompanyModel;
 import '../models/admin/product _model.dart';
@@ -30,7 +30,7 @@ Widget buildProductForm(BuildContext context, {ProductModel? existingProduct}) {
   final categories = categoryController.categoryList;
 
   final ImagePicker picker = ImagePicker();
-  File? pickedImage = existingProduct?.imagePath != null ? File(existingProduct!.imagePath!) : null;
+  File? pickedImage = existingProduct?.imagePath != null ? File(existingProduct!.imagePath) : null;
 
   String selectedUnit = existingProduct?.unit ?? 'liter';
   int? selectedCompanyId = existingProduct?.companyId;
@@ -89,8 +89,8 @@ Widget buildProductForm(BuildContext context, {ProductModel? existingProduct}) {
             InputField(
               hintColor: AppColors.black,
               controller: nameController,
-              hintText: "Product Name",
-              label: "Name",
+              hintText: "Enter the Product Name",
+              label: "Product Name",
               prefixIcon: AppIcons.product,
               fillColor: AppColors.black.withAlpha(12),
               labelColor: AppColors.black,
@@ -112,8 +112,8 @@ Widget buildProductForm(BuildContext context, {ProductModel? existingProduct}) {
             InputField(
               hintColor: AppColors.black,
               controller: quantityController,
-              hintText: "Initial Quantity",
-              label: "Quantity",
+              hintText: "Enter the Stock",
+              label: "Stock",
               keyboardType: TextInputType.number,
               prefixIcon: AppIcons.quantity,
               fillColor: AppColors.black.withAlpha(12),
@@ -172,6 +172,9 @@ prefixColor: AppColors.black,
 
             const SizedBox(height: 24),
             TextAction(
+              verticalPadding: 12,
+              backgroundColor: Colors.black,
+              circleIcon: AppColors.white,
               text: existingProduct == null ? "Save" : "Update",
               onPressed: () {
                 productController.validateAndSubmitProduct(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sohail_auto/res/app_color.dart';
+
+import '../const/res/app_color.dart';
 
 class TextAction extends StatelessWidget {
   final String text;
@@ -11,6 +12,7 @@ class TextAction extends StatelessWidget {
   final double fontSize;
   final bool isFullWidth;
   final Color? circleIcon;
+  final Color? iconShapeColor;
   final bool? iconShow;
 
   const TextAction({
@@ -24,6 +26,7 @@ class TextAction extends StatelessWidget {
     this.fontSize = 16.0,
     this.isFullWidth = true,
     this.circleIcon = AppColors.c5669ff,
+    this.iconShapeColor=Colors.black,
     this.iconShow = true,
   });
 
@@ -57,8 +60,8 @@ class TextAction extends StatelessWidget {
                     style: TextStyle(
                       fontSize: fontSize,
                       color: textColor,
-                      fontFamily: "Lexend",
-                      fontWeight: FontWeight.w600,
+                      fontFamily: "Lufga",
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
@@ -71,8 +74,9 @@ class TextAction extends StatelessWidget {
                         backgroundColor: circleIcon,
                         radius: 15,
                         child: Icon(
-                          Icons.arrow_forward_rounded,
-                          color: AppColors.white,
+                          Icons.arrow_forward_ios_sharp,
+                          color: iconShapeColor,
+                          size: 17,
                         ),
                       ),
                     ),

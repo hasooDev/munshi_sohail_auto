@@ -10,6 +10,8 @@ class SaleModel {
 class SalesController extends GetxController {
   var salesList = <SaleModel>[].obs;
 
+  Null get focusedDay => null;
+
   @override
   void onInit() {
     super.onInit();

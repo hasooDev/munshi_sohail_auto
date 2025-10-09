@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../const/res/app_color.dart';
 import '../../models/admin/product _model.dart';
-import '../../res/app_color.dart';
 import '../../services/database_helper.dart';
 import '../../widgets/app_text.dart';
 import '../../widgets/text_action.dart';
@@ -13,6 +13,8 @@ class ProductController extends GetxController {
   RxList<ProductModel> productList = <ProductModel>[].obs;
   RxList<ProductModel> filteredProductList = <ProductModel>[].obs;
   RxString searchQuery = ''.obs;
+  RxBool isLoading=false.obs;
+
 
   @override
   void onInit() {
@@ -97,6 +99,20 @@ class ProductController extends GetxController {
                 text: "Delete",
                 onPressed: () {
                   Get.back();
+                    Get.snackbar(
+                        "Deleted", // <- title
+                        "Company $productName successfully deleted", // <- message
+                        snackPosition: SnackPosition.TOP,
+                        backgroundColor: Colors.red,
+                        duration: const Duration(seconds: 3),
+                        margin: const EdgeInsets.all(12),
+                        borderRadius: 8,
+                        icon: const Icon(
+                          Icons.done_outline,
+                          color: Colors.white,
+                        ),
+                        colorText: Colors.white,
+                      );
                   onDelete();
                 },
                 verticalPadding: 8,
@@ -191,7 +207,7 @@ class ProductController extends GetxController {
       icon: Icon(Icons.done_outline, color: Colors.white),
       titleText: AppText(text: "Success", color: AppColors.white),
       messageText: AppText(
-        text: existingProduct == null ? "Product Added!" : "Product Updated!",
+        text: existingProduct == null ? "Product Added Successfully 🎉" : "Product Updated Successfully 🎉",
         color: AppColors.white,
       ),
     );

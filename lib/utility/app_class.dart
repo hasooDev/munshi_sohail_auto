@@ -26,3 +26,32 @@ class DashBoardItem {
     required this.onTap
   });
 }
+
+// qty controls
+// Padding(
+//   padding: const EdgeInsets.symmetric(horizontal: 6),
+//   child: Row(
+//     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//     children: [
+//       IconButton(
+//         onPressed: () {
+//           // TODO: decrease quantity for this customer
+//         },
+//         icon: const Icon(Icons.remove_circle,
+//             color: Colors.red),
+//       ),
+//       const AppText(
+//         text: "0", // TODO: bind to selected quantity
+//         fontSize: 14,
+//         fontWeight: FontWeight.bold,
+//       ),
+//       IconButton(
+//         onPressed: () {
+//           // TODO: increase quantity for this customer
+//         },
+//         icon: const Icon(Icons.add_circle,
+//             color: Colors.green),
+//       ),
+//     ],
+//   ),
+// ),

@@ -1,23 +1,37 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:sohail_auto/munshi_sohail_auto.dart';
+import 'package:sohail_auto/services/database_helper.dart';
 import 'package:sohail_auto/utility/request_permission_handler.dart';
+import 'package:sohail_auto/utility/storage_services.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await requestStoragePermission();
-  /*await Supabase.initialize(
-    url: 'https://zumfijdevomrcetniemn.supabase.co', // Replace this
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp1bWZpamRldm9tcmNldG5pZW1uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM0Mzk3NzIsImV4cCI6MjA2OTAxNTc3Mn0.aTJq8naDqprPChJ0DPWsMvqLTM-KNy8TPKRvWVlzXJE', // Replace this
-  );*/
+  final storageService = await StorageService().init();
+  Get.put(storageService);
   /*Status Bar Colors*/
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-    statusBarIconBrightness: Brightness.dark,
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+    ),
+  );
+  /* Future Task */
+  Future.microtask(() async {
+    try {
+      // This will trigger _initDB() internally
+      await DatabaseHelper().database;
+      debugPrint("✅ SQLite Database initialized in background");
+    } catch (e, s) {
+      debugPrint("❌ Error during background init: $e");
+      debugPrintStack(stackTrace: s);
+    }
+  });
+  runApp(MunshiSohailAuto());
 
-  ));
 
-
-  runApp( MunshiSohailAuto());
 }
-

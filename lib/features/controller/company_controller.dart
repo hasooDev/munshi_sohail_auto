@@ -1,32 +1,39 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:sohail_auto/widgets/text_action.dart';
 
+import '../../const/res/app_color.dart';
 import '../../models/admin/company_model.dart';
-import '../../res/app_color.dart';
 import '../../services/database_helper.dart';
 import '../../widgets/app_text.dart';
+
 class CompanyController extends GetxController {
   RxList<CompanyModel> companyList = <CompanyModel>[].obs;
   RxList<CompanyModel> filteredCompanyList = <CompanyModel>[].obs;
   RxString searchQuery = ''.obs;
+  RxBool isLoading = false.obs;
+final loader = SpinKitFadingCircle(
+    color: Colors.black.withOpacity(0.5),
+    size: 36,
+  );
 
   @override
   void onInit() {
     fetchCompanies();
-
     // Watch for changes in searchQuery or companyList and update the filtered list
     everAll([searchQuery, companyList], (_) => _filterCompanies());
-
     super.onInit();
   }
 
   Future<void> fetchCompanies() async {
     final companies = await DatabaseHelper().getCompanies();
     companyList.assignAll(companies);
-    _filterCompanies(); // Update filtered list after fetching
+    _filterCompanies();
+
+    // Update filtered list after fetching
   }
 
   void setSearchQuery(String query) {
@@ -39,9 +46,7 @@ class CompanyController extends GetxController {
       filteredCompanyList.assignAll(companyList);
     } else {
       filteredCompanyList.assignAll(
-        companyList.where(
-              (c) => c.name.toLowerCase().contains(query),
-        ),
+        companyList.where((c) => c.name.toLowerCase().contains(query)),
       );
     }
   }
@@ -102,8 +107,23 @@ class CompanyController extends GetxController {
                 fontSize: 18,
                 text: "Delete",
                 onPressed: () {
-                  Get.back(); // Close the dialog
+      // Close the dialog
                   onDelete();
+                  Get.back();
+                      Get.snackbar(
+                        "Deleted", // <- title
+                        "Company $companyId successfully deleted", // <- message
+                        snackPosition: SnackPosition.TOP,
+                        backgroundColor: Colors.red,
+                        duration: const Duration(seconds: 3),
+                        margin: const EdgeInsets.all(12),
+                        borderRadius: 8,
+                        icon: const Icon(
+                          Icons.done_outline,
+                          color: Colors.white,
+                        ),
+                        colorText: Colors.white,
+                      );
                 },
                 verticalPadding: 8,
                 textColor: AppColors.white,
@@ -144,6 +164,9 @@ class CompanyController extends GetxController {
       return;
     }
 
+    /*isLoading.value = true;
+    await Future.delayed(const Duration(seconds: 2));*/
+
     final company = CompanyModel(
       id: existingCompany?.id,
       name: name,
@@ -160,16 +183,23 @@ class CompanyController extends GetxController {
     Get.back();
     Get.snackbar(
       snackPosition: SnackPosition.TOP,
-      backgroundColor: Colors.redAccent,
+      backgroundColor: Colors.green,
       duration: Duration(seconds: 3),
       margin: EdgeInsets.all(12),
       borderRadius: 8,
       icon: Icon(Icons.done_outline, color: Colors.white),
       "",
       "",
-      titleText: AppText(text: "Success", color: AppColors.white, fontWeight: FontWeight.w800, fontSize: 15),
+      titleText: AppText(
+        text: "Success",
+        color: AppColors.white,
+        fontWeight: FontWeight.w800,
+        fontSize: 15,
+      ),
       messageText: AppText(
-        text: existingCompany == null ? "Company added BAWA G !!!!" : "Company Updated Huraaaah !!!!",
+        text: existingCompany == null
+            ? "Company Added Successfully 🎉 "
+            : "Company Updated 🎯",
         color: AppColors.white,
       ),
     );

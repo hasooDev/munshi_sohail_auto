@@ -1,6 +1,8 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import '../res/app_color.dart';
+
+import '../const/res/app_color.dart';
 import '../utility/app_class.dart';
 import 'app_text.dart';
 
@@ -30,7 +32,9 @@ class DashBoardCards extends StatelessWidget {
                 child: Container(
                   height: cardSize,
                   decoration: BoxDecoration(
+                    // ignore: deprecated_member_use
                     border: Border.all(color: Colors.white.withOpacity(0.1)),
+                    // ignore: deprecated_member_use
                     color: AppColors.white.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(16),
                   ),

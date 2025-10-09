@@ -8,7 +8,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:sohail_auto/main.dart';
 import 'package:sohail_auto/munshi_sohail_auto.dart';
 
 void main() {

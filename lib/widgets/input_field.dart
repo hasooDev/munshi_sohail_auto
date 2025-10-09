@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sohail_auto/res/app_color.dart';
-import 'package:sohail_auto/res/app_icons.dart';
 import 'package:sohail_auto/widgets/app_text.dart';
+import '../const/res/app_color.dart';
+import '../const/res/app_icons.dart';
 
 class InputField extends StatefulWidget {
   final TextEditingController controller;
@@ -13,10 +13,16 @@ class InputField extends StatefulWidget {
   final String? prefixIcon;
   final bool isPassword;
   final String? label;
-  final  Color? labelColor;
+  final Color? labelColor;
   final Color? hintColor;
-  final Color?fillColor;
-  final Color?prefixColor;
+  final Color? fillColor;
+  final Color? prefixColor;
+  final Color borderSideColor;
+  final double verticalPadding;
+  final TextInputAction keyboardAction;
+
+  /// 🔎 Added search callback
+  final ValueChanged<String>? onChanged;
 
   const InputField({
     super.key,
@@ -24,15 +30,21 @@ class InputField extends StatefulWidget {
     required this.hintText,
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
+    this.verticalPadding = 12,
     this.validator,
     this.prefixIcon,
     this.isPassword = false,
     this.label,
-    this.labelColor=AppColors.white,
-    this.hintColor=Colors.white70,
+    this.labelColor = AppColors.white,
+    this.hintColor = Colors.white70,
     this.fillColor,
-    this.labelShow=true,
-    this.prefixColor=Colors.white
+    this.labelShow = true,
+    this.prefixColor = Colors.white,
+    this.borderSideColor = AppColors.cdadee3,
+    this.keyboardAction = TextInputAction.done,
+
+    /// 🔎 added
+    this.onChanged,
   });
 
   @override
@@ -41,6 +53,7 @@ class InputField extends StatefulWidget {
 
 class _InputFieldState extends State<InputField> {
   late bool _obscureText;
+
   @override
   void initState() {
     _obscureText = widget.obscureText;
@@ -54,28 +67,37 @@ class _InputFieldState extends State<InputField> {
       children: [
         if (widget.label != null && widget.label!.isNotEmpty)
           Padding(
-            padding: const EdgeInsets.only(left: 12, bottom: 8),
+            padding: const EdgeInsets.only(left: 2, bottom: 8),
             child: AppText(
               text: widget.label!,
               fontSize: 14,
               color: widget.labelColor,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w800,
             ),
           ),
         TextFormField(
+          textInputAction: widget.keyboardAction,
           controller: widget.controller,
           obscureText: _obscureText,
           keyboardType: widget.keyboardType,
-          style:  TextStyle(
+          style: TextStyle(
             color: widget.labelColor,
-            fontFamily: "Lexend",
+            fontFamily: "Lufga",
           ),
           validator: widget.validator,
+
+          /// 🔎 Search function trigger
+          onChanged: widget.onChanged,
+
           decoration: InputDecoration(
             hintText: widget.hintText,
-            hintStyle:  TextStyle(
-              fontFamily: "Lexend",
-              color:widget.hintColor,
+            contentPadding: EdgeInsets.symmetric(
+              vertical: widget.verticalPadding,
+              horizontal: 12,
+            ),
+            hintStyle: TextStyle(
+              fontFamily: "Lufga",
+              color: widget.hintColor,
             ),
             prefixIcon: widget.prefixIcon != null
                 ? Padding(
@@ -84,7 +106,7 @@ class _InputFieldState extends State<InputField> {
                 widget.prefixIcon!,
                 height: 24,
                 width: 24,
-                color:  widget.prefixColor,
+                color: widget.prefixColor,
               ),
             )
                 : null,
@@ -98,9 +120,7 @@ class _InputFieldState extends State<InputField> {
               child: Padding(
                 padding: const EdgeInsets.all(12),
                 child: Image.asset(
-                  _obscureText
-                      ?AppIcons.eyeOff
-                      :  AppIcons.eyeOn,
+                  _obscureText ? AppIcons.eyeOff : AppIcons.eyeOn,
                   height: 24,
                   width: 24,
                   color: Colors.white,
@@ -109,11 +129,11 @@ class _InputFieldState extends State<InputField> {
             )
                 : null,
             filled: true,
-            fillColor:  widget.fillColor,
+            fillColor: widget.fillColor,
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(
-                color: AppColors.cdadee3,
+                color: widget.borderSideColor,
                 width: 2,
               ),
             ),

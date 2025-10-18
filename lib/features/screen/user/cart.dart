@@ -18,8 +18,9 @@ class Cart extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: CustomAppBar(
+
         title: "Cart",
-        showBack: true,
+        showBack: false,
       ),
       body: Obx(() {
         final cart = cartController.cart;

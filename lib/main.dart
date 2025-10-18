@@ -9,7 +9,6 @@ import 'package:sohail_auto/utility/storage_services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await requestStoragePermission();
   final storageService = await StorageService().init();
   Get.put(storageService);

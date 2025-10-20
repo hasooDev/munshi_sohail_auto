@@ -29,23 +29,23 @@ class AdminItemCard extends StatelessWidget {
         "iconPath": AppIcons.colorProduct,
         "onTap": () => Get.toNamed(AppRoutes.product),
       },
-      {
-        "title": "Customer",
-        "iconPath": AppIcons.colorCustomer,
-        "onTap": () => Get.toNamed(AppRoutes.customer),
-      },
-      {
-        "title": "Sales",
-        "iconPath": AppIcons.colorSales,
-        "onTap": () => Get.toNamed(AppRoutes.sales),
-      },
+      // {
+      //   "title": "Customer",
+      //   "iconPath": AppIcons.colorCustomer,
+      //   "onTap": () => Get.toNamed(AppRoutes.customer),
+      // },
+      // {
+      //   "title": "Sales",
+      //   "iconPath": AppIcons.colorSales,
+      //   "onTap": () => Get.toNamed(AppRoutes.sales),
+      // },
       {
         "title": "Consumer\nData",
         "iconPath": AppIcons.colorClient,
         "onTap": () => Get.toNamed(AppRoutes.clientData),
       },
       {
-        "title": "Backup\nRestore Data",
+        "title": "Backup\nData",
         "iconPath": AppIcons.colorBackup,
         "onTap": () => Get.toNamed(AppRoutes.backup),
       },
@@ -62,9 +62,9 @@ class AdminItemCard extends StatelessWidget {
       padding: const EdgeInsets.all(14),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 5,
-        mainAxisSpacing: 14,
-        childAspectRatio: 1.8,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+        childAspectRatio: 1.2,
       ),
       itemCount: items.length,
       itemBuilder: (context, index) {

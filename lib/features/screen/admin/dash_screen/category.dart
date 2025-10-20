@@ -22,7 +22,16 @@ class Category extends StatefulWidget {
 class _CategoryState extends State<Category> {
   final categoryController = Get.put(CategoryController());
   final companyController = Get.put(CompanyController());
+  @override
+  void initState() {
+    super.initState();
 
+    Future.microtask(() async {
+      categoryController.isLoading.value = true;
+      await categoryController.fetchCategories();
+      categoryController.isLoading.value = false;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Stack(

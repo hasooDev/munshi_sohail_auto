@@ -1,64 +1,99 @@
 import 'dart:io';
-
+import 'package:archive/archive_io.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sohail_auto/services/database_helper.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sohail_auto/services/database_helper.dart';
+
+import '../features/controller/category_controller.dart';
+import '../features/controller/company_controller.dart';
+import '../features/controller/product_controller.dart';
 
 class SQLiteBackupHelper {
-  static const String imagesFolderName = "product_images";
+  // Folder names for image storage used in your app
+  static const String companyImagesFolder = "company_images";
+  static const String categoryImagesFolder = "category_images";
+  static const String productImagesFolder = "product_images";
+  static const String serviceImagesFolder = "service_images";
 
-  /// Get DB path
+  /// ✅ Get database path
   static Future<String> getDatabasePath(String dbName) async {
     final directory = await getDatabasesPath();
     return "$directory/$dbName";
   }
 
-  /// Get the folder where product images are stored
-  static Future<String> getImagesPath() async {
-    // ✅ Use documents directory (adjust if you use external storage)
+  /// ✅ Get app documents directory
+  static Future<String> getAppDocumentsPath() async {
     final directory = await getApplicationDocumentsDirectory();
-    return p.join(directory.path, imagesFolderName);
+    return directory.path;
   }
 
-  /// Ensure permission
+  /// ✅ Ensure storage permission
   static Future<bool> _ensureStoragePermission() async {
     if (await Permission.storage.request().isGranted) return true;
     if (await Permission.manageExternalStorage.request().isGranted) return true;
     return false;
   }
 
-  /// Recursive directory copy
-  static Future<void> _copyDirectory(
-    Directory source,
-    Directory destination,
-  ) async {
+  /// ✅ Copy directory recursively (used for restoring images)
+  static Future<void> _copyDirectory(Directory source, Directory destination) async {
     if (!await destination.exists()) {
       await destination.create(recursive: true);
     }
-
     await for (var entity in source.list(recursive: true)) {
       if (entity is File) {
         final relativePath = p.relative(entity.path, from: source.path);
         final newPath = p.join(destination.path, relativePath);
         final newFile = File(newPath);
-        if (!await newFile.parent.exists()) {
-          await newFile.parent.create(recursive: true);
-        }
+        await newFile.parent.create(recursive: true);
         await entity.copy(newPath);
       }
     }
   }
 
-  /// Backup DB + images
+  /// ✅ ZIP multiple image directories
+  static Future<String> _zipAllImages(List<String> imageDirs, String outputDir) async {
+    final zipPath = p.join(outputDir, "all_images.zip");
+    final encoder = ZipFileEncoder();
+    encoder.create(zipPath);
+
+    for (final dirPath in imageDirs) {
+      final dir = Directory(dirPath);
+      if (await dir.exists()) {
+        encoder.addDirectory(dir);
+      }
+    }
+
+    encoder.close();
+    return zipPath;
+  }
+
+  /// ✅ Unzip all images into the correct directories
+  static Future<void> _unzipImages(String zipPath, String outputDir) async {
+    final bytes = File(zipPath).readAsBytesSync();
+    final archive = ZipDecoder().decodeBytes(bytes);
+
+    for (final file in archive) {
+      final filePath = p.join(outputDir, file.name);
+      if (file.isFile) {
+        final f = File(filePath)
+          ..createSync(recursive: true)
+          ..writeAsBytesSync(file.content);
+      }
+    }
+  }
+
+  // -----------------------------------------------------------------------------
+  // 🔹 BACKUP (Database + All Images)
+  // -----------------------------------------------------------------------------
   static Future<void> backupDatabase({required String dbName}) async {
     try {
       if (!await _ensureStoragePermission()) {
-        Get.snackbar("Error", "Storage permission not granted");
+        Get.snackbar("Permission Denied", "Storage permission not granted");
         return;
       }
 
@@ -69,93 +104,124 @@ class SQLiteBackupHelper {
         return;
       }
 
-      final imagesPath = await getImagesPath();
-      final imagesDir = Directory(imagesPath);
+      final appPath = await getAppDocumentsPath();
 
-      // Pick folder to save backup
+      // Image folders used throughout your app
+      final imageFolders = [
+        p.join(appPath, companyImagesFolder),
+        p.join(appPath, categoryImagesFolder),
+        p.join(appPath, productImagesFolder),
+        p.join(appPath, serviceImagesFolder),
+      ];
+
+      // Ask user to select backup destination
       String? outputDir = await FilePicker.platform.getDirectoryPath();
       if (outputDir == null) {
-        Get.snackbar("Cancelled", "No folder selected");
+        Get.snackbar("Cancelled", "Backup folder not selected");
         return;
       }
 
+      final timestamp = DateTime.now().toIso8601String().replaceAll(':', '-');
+      final backupDir = Directory(p.join(outputDir, "Backup_$timestamp"));
+      await backupDir.create(recursive: true);
+
       // Copy DB
-      final backupFile = File(p.join(outputDir, "${dbName}_backup.db"));
+      final backupFile = File(p.join(backupDir.path, "${dbName}_backup.db"));
       await dbFile.copy(backupFile.path);
 
-      // Copy images recursively
-      if (await imagesDir.exists()) {
-        final backupImagesDir = Directory(p.join(outputDir, imagesFolderName));
-        await _copyDirectory(imagesDir, backupImagesDir);
-      }
+      // ZIP all image folders
+      await _zipAllImages(imageFolders, backupDir.path);
 
       Get.snackbar(
-        "Success",
-        "Backup saved at: $outputDir 🎉",
+        "✅ Backup Complete",
+        "Backup successfully saved at:\n${backupDir.path}",
         snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.green,
-        duration: Duration(seconds: 3),
+        colorText: Colors.white,
+        duration: const Duration(seconds: 4),
       );
     } catch (e) {
-      Get.snackbar("Backup failed", e.toString());
-      debugPrint(e.toString());
+      Get.snackbar(
+        "❌ Backup Failed",
+        e.toString(),
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+      );
+      debugPrint("Backup error: $e");
     }
   }
 
-  /// Restore DB + images
+  // -----------------------------------------------------------------------------
+  // 🔹 RESTORE (Database + All Images)
+  // -----------------------------------------------------------------------------
   static Future<void> restoreDatabase({required String dbName}) async {
     try {
       if (!await _ensureStoragePermission()) {
-        Get.snackbar("Error", "Storage permission not granted");
+        Get.snackbar("Permission Denied", "Storage permission not granted");
         return;
       }
 
       String? inputDir = await FilePicker.platform.getDirectoryPath();
       if (inputDir == null) {
-        Get.snackbar("Cancelled", "No folder selected");
+        Get.snackbar("Cancelled", "Restore folder not selected");
         return;
       }
 
-      final dbBackupFile = File(p.join(inputDir, "${dbName}_backup.db"));
-      if (!await dbBackupFile.exists()) {
-        Get.snackbar("Error", "Backup database not found");
-        return;
-      }
+      // Look for backup DB file
+      final dbBackupFile = Directory(inputDir)
+          .listSync()
+          .whereType<File>()
+          .firstWhere(
+            (f) => f.path.endsWith("_backup.db"),
+        orElse: () => throw Exception("Backup database file not found."),
+      );
 
       final dbPath = await getDatabasePath(dbName);
-
-      // Close any open DB
       await DatabaseHelper().closeDatabase();
 
-      // Replace DB safely
+      // Safely replace DB
       final tempPath = "$dbPath.temp";
       await dbBackupFile.copy(tempPath);
       await deleteDatabase(dbPath);
       await File(tempPath).rename(dbPath);
 
-      // Restore images recursively
-      final backupImagesDir = Directory(p.join(inputDir, imagesFolderName));
-      if (await backupImagesDir.exists()) {
-        final imagesPath = await getImagesPath();
-        final imagesDir = Directory(imagesPath);
-        await _copyDirectory(backupImagesDir, imagesDir);
+      // Restore all image folders from zip
+      final zipFile = File(p.join(inputDir, "all_images.zip"));
+      if (await zipFile.exists()) {
+        final appPath = await getAppDocumentsPath();
+        await _unzipImages(zipFile.path, appPath);
       }
+      try {
+        final categoryController = Get.find<CategoryController>();
+        final productController = Get.find<ProductController>();
+        final companyController = Get.find<CompanyController>();
 
+        await categoryController.fetchCategories();
+        await productController.fetchProducts();
+        await companyController.fetchCompanies();
+
+        debugPrint("Controllers reloaded successfully after restore ✅");
+      } catch (e) {
+        debugPrint("Controller reload error: $e");
+      }
       Get.snackbar(
-        "Success",
-        "Database & images restored 🎉",
+        "✅ Restore Complete",
+        "Database & all images restored successfully!",
         snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.green,
-        duration: Duration(seconds: 3),
+        colorText: Colors.white,
+        duration: const Duration(seconds: 4),
       );
     } catch (e) {
       Get.snackbar(
-        "Restore failed",
+        "❌ Restore Failed",
         e.toString(),
         snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.red,
-        duration: Duration(seconds: 3),
+        colorText: Colors.white,
+        duration: const Duration(seconds: 4),
       );
+      debugPrint("Restore error: $e");
     }
   }
 }

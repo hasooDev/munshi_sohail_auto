@@ -214,6 +214,7 @@ class _BackUpState extends State<BackUp> {
               onTap: () async {
                 await requestStoragePermission();
                 await SQLiteBackupHelper.restoreDatabase(dbName: dbName);
+
               },
               color: Colors.blue,
             ),

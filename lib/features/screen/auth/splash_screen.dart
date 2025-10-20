@@ -41,9 +41,12 @@ class SplashScreen extends StatelessWidget {
                               ).animate()
                   .fadeIn(duration: 4500.ms),
                       AppText(
+
                         text: AppStrings.appName,
                         color: Colors.white,
-                        fontSize: 35,
+                        fontSize: 30,
+                        textAlign: TextAlign.center,
+
                         fontWeight: FontWeight.w900,
                       ).animate().fadeIn(duration: 4500.ms),
                       SizedBox(height: 7),

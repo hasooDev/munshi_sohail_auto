@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../services/sql_lite_backup_helper.dart';
 
 class GridItem {
   final String title;
@@ -55,3 +60,13 @@ class DashBoardItem {
 //     ],
 //   ),
 // ),
+
+
+// Future<void> backupToSupabase() async {
+//   final dbData = await SQLiteBackupHelper.exportToJson(); // You create this
+//   final supabase = Supabase.instance.client;
+//   await supabase.from('backups').insert({
+//     'user_id': supabase.auth.currentUser?.id,
+//     'db_data': jsonEncode(dbData),
+//   });
+// }

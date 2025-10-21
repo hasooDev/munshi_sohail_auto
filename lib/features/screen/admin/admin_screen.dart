@@ -98,16 +98,16 @@ class _AdminScreenState extends State<AdminScreen> {
                         number: productController.productList.length,
                         iconPath: AppIcons.colorProduct,
                       ),
-                      // GridItem(
-                      //   title: 'Customer',
-                      //   number: 0,
-                      //   iconPath: AppIcons.colorCustomer,
-                      // ),
-                      // GridItem(
-                      //   title: 'Sales',
-                      //   number: 0,
-                      //   iconPath: AppIcons.colorSales,
-                      // ),
+                      GridItem(
+                        title: 'Customer',
+                        number: 0,
+                        iconPath: AppIcons.colorCustomer,
+                      ),
+                      GridItem(
+                        title: 'Sales',
+                        number: 0,
+                        iconPath: AppIcons.colorSales,
+                      ),
                       GridItem(
                         title: 'Consumer Data',
                         number: consumerController.consumerList.length,

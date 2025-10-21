@@ -28,7 +28,7 @@ class SplashScreen extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 68.0),
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
+
 
                     mainAxisAlignment: MainAxisAlignment.center,
                   
@@ -44,7 +44,7 @@ class SplashScreen extends StatelessWidget {
 
                         text: AppStrings.appName,
                         color: Colors.white,
-                        fontSize: 30,
+                        fontSize: 35,
                         textAlign: TextAlign.center,
 
                         fontWeight: FontWeight.w900,

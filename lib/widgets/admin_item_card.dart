@@ -29,16 +29,16 @@ class AdminItemCard extends StatelessWidget {
         "iconPath": AppIcons.colorProduct,
         "onTap": () => Get.toNamed(AppRoutes.product),
       },
-      // {
-      //   "title": "Customer",
-      //   "iconPath": AppIcons.colorCustomer,
-      //   "onTap": () => Get.toNamed(AppRoutes.customer),
-      // },
-      // {
-      //   "title": "Sales",
-      //   "iconPath": AppIcons.colorSales,
-      //   "onTap": () => Get.toNamed(AppRoutes.sales),
-      // },
+      {
+        "title": "Customer",
+        "iconPath": AppIcons.colorCustomer,
+        "onTap": () => Get.toNamed(AppRoutes.customer),
+      },
+      {
+        "title": "Sales",
+        "iconPath": AppIcons.colorSales,
+        "onTap": () => Get.toNamed(AppRoutes.sales),
+      },
       {
         "title": "Consumer\nData",
         "iconPath": AppIcons.colorClient,
@@ -63,8 +63,8 @@ class AdminItemCard extends StatelessWidget {
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        childAspectRatio: 1.2,
+        mainAxisSpacing: 12,
+        childAspectRatio: 1.8,
       ),
       itemCount: items.length,
       itemBuilder: (context, index) {
